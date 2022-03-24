@@ -11,11 +11,20 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      - id: bump
-        uses: zwaldowski/match-label-action@v1
+      # Checkout the repository
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          allowed: major,minor,patch
-      - uses: zwaldowski/semver-release-action@v1
-        with:
-          bump: ${{ steps.bump.outputs.match }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      - name: Fetch tags
+        shell: bash
+        run: git fetch --tags -f
+      - name: Autotag
+        uses: DanySK/semver-autotag-action@master
+      - name: Deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG=$(git describe --tags --exact-match HEAD)
+          hub release create -m "$(git tag -l --format='%(contents)' "$TAG")" "$TAG" || true
+          hub release edit -m '' -a a_file "$TAG"
