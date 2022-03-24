@@ -1,30 +1,48 @@
-name: CI
+# name: CI
+# on:
+#   push:
+#     branches: [ main ]
+#   workflow_dispatch:
+
+# jobs:
+#   tagged-release:
+  
+#     name: "Tagged Release"
+#     runs-on: "ubuntu-latest"
+
+#     steps:
+#       # Checkout the repository
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 0
+#       - name: Fetch tags
+#         shell: bash
+#         run: git fetch --tags -f
+#       - name: Autotag
+#         uses: DanySK/semver-autotag-action@master
+#       - name: Deploy
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         run: |
+#           TAG=$(git describe --tags --exact-match HEAD)
+#           hub release create -m "$(git tag -l --format='%(contents)' "$TAG")" "$TAG" || true
+#           hub release edit -m '' -a a_file "$TAG"
+
+
+name: Release
+
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+  pull_request:
+    types: closed
 
 jobs:
-  tagged-release:
-  
-    name: "Tagged Release"
-    runs-on: "ubuntu-latest"
-
+  build:
+    runs-on: ubuntu-latest
     steps:
-      # Checkout the repository
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Tag
+        uses: K-Phoen/semver-release-action@master
         with:
-          fetch-depth: 0
-      - name: Fetch tags
-        shell: bash
-        run: git fetch --tags -f
-      - name: Autotag
-        uses: DanySK/semver-autotag-action@master
-      - name: Deploy
+          release_branch: master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          TAG=$(git describe --tags --exact-match HEAD)
-          hub release create -m "$(git tag -l --format='%(contents)' "$TAG")" "$TAG" || true
-          hub release edit -m '' -a a_file "$TAG"
