@@ -1,21 +1,43 @@
-name: Bump version
+name: Release
+
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [ labeled ]
+
 jobs:
-  build:
+  prepare-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Set major release
+        if: ${{ github.event.label.name == 'release-major' }}
+        run: echo "RELEASE=major" >> $GITHUB_ENV
+      - name: Set minor release
+        if: ${{ github.event.label.name == 'release-minor' }}
+        run: echo "RELEASE=minor" >> $GITHUB_ENV
+      - name: Set patch release
+        if: ${{ github.event.label.name == 'release-patch' }}
+        run: echo "RELEASE=patch" >> $GITHUB_ENV
+
+      - name: Check release env
+        run: |
+          if [[ -z "${{ env.RELEASE }}" ]];
+          then
+            echo "You need to set a release label on PRs to the main branch"
+            exit 1
+          else
+            exit 0
+          fi
+
+      - name: Setup git
+        run: |
+          git config user.email "pusher-ci@noreply.com"
+          git config user.name "Bot Pusher"
+          git fetch
+          git checkout ${{ github.event.pull_request.head.ref }}
+          
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+          default_bump: "major"
