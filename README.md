@@ -5,3 +5,4 @@ testing workflows of github actions
 
 minor
 patch
+major
