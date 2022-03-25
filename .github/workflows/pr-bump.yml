@@ -1,0 +1,19 @@
+name: PR Tag Release
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - "stage"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        label: ${{github.event.pull_request.labels.*.name}}
+        
+    steps:
+      - name: Testing Labels
+        run: |
+          echo PR Label: ${{matrix.label}}
