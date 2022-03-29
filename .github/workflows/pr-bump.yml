@@ -7,27 +7,23 @@ on:
       - "main"
 
 jobs:
-  build:
-    if: contains(github.event.pull_request.labels.*.name, 'release:major') || contains(github.event.pull_request.labels.*.name, 'release:minor') || contains(github.event.pull_request.labels.*.name, 'release:patch')
+  tag-release:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         label: ${{github.event.pull_request.labels.*.name}}
         
     steps:
-      - name: Check Tags
-        run: |
-          if [[ matrix.label == 'release:major' || matrix.label == 'release:minor' || matrix.label == 'release:patch' ]]; then echo "Build label matched"; else exit 1; fi
-
-      - name: Testing Labels
+      - if: startsWith(matrix.label, 'release:')
+        name: Testing Labels
         run: |
           echo "-------> ${{github.event.pull_request.labels}}"
           release_type=`echo ${{matrix.label}} | awk -F':' '{print $NF}'`
           echo "RELEASE_TYPE=${release_type}" >> $GITHUB_ENV
           echo "Releasing: ${release_type}"
           
-      - uses: actions/checkout@v2
-      - name: Bump version and push tag
+      - if: startsWith(matrix.label, 'release:')
+        name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.0
         with:
