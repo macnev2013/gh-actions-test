@@ -9,3 +9,4 @@ major
  
 sas
 patch
+minor
