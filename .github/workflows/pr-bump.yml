@@ -8,12 +8,11 @@ on:
 
 jobs:
   build:
-#     if: contains(github.event.pull_request.labels.*.name, 'release:')
+    if: contains(github.event.pull_request.labels.*.name, 'release:')
     runs-on: ubuntu-latest
     strategy:
       matrix:
-#         label: ${{github.event.pull_request.labels.release:major.name}}
-        label: [github.event.pull_request.labels.release:major.name ]
+        label: ${{github.event.pull_request.labels.*.name}}
         
     steps:
       - name: Testing Labels
