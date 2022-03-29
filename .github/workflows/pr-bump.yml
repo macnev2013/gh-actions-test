@@ -8,11 +8,11 @@ on:
 
 jobs:
   build:
-    if: contains(github.event.pull_request.labels.*.name, 'release:minor') || contains(github.event.pull_request.labels.*.name, 'release:major') || contains(github.event.pull_request.labels.*.name, 'release:patch')
+#     if: contains(github.event.pull_request.labels.*.name, 'release:minor') || contains(github.event.pull_request.labels.*.name, 'release:major') || contains(github.event.pull_request.labels.*.name, 'release:patch')
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        label: ${{github.event.pull_request.labels.*.name}}
+        label: ${{github.event.pull_request.labels.release-*.name}}
         
     steps:
       - name: Testing Labels
