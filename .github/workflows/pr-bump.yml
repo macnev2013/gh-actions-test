@@ -17,7 +17,11 @@ jobs:
     steps:
       - name: Check Tags
         run: |
-          if [[ matrix.label == 'release:major' || matrix.label == 'release:minor' || matrix.label == 'release:patch' ]]; then exit 0
+          if [[ matrix.label == 'release:major' || matrix.label == 'release:minor' || matrix.label == 'release:patch' ]];
+          then
+            echo "-asjnsvorjvoisjvioss"
+          else
+            exit 0
 
       - name: Testing Labels
         run: |
