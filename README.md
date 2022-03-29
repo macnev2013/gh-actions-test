@@ -10,3 +10,4 @@ major
 sas
 patch
 minor
+test
