@@ -4,20 +4,20 @@ on:
     types:
       - closed
     branches:
-      - "main"
+      - main
 
 jobs:
   tag-release:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        label: ${{github.event.pull_request.labels.*.name}}
+        label: ${{ github.event.pull_request.labels.*.name }}
         
     steps:
       - if: startsWith(matrix.label, 'release:')
         name: Testing Labels
         run: |
-          echo "-------> ${{github.event.pull_request.labels}}"
           release_type=`echo ${{matrix.label}} | awk -F':' '{print $NF}'`
           echo "RELEASE_TYPE=${release_type}" >> $GITHUB_ENV
           echo "Releasing: ${release_type}"
