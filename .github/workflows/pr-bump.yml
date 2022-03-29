@@ -2,12 +2,13 @@ name: PR Tag Release
 on:
   pull_request:
     types:
-      - closed
+      - "merged"
     branches:
       - "main"
 
 jobs:
   tag-release:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
       matrix:
