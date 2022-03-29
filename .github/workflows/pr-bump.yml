@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Check Tags
         run: |
-          if [[ !startsWith(matrix.label, 'release:') ]]; then exit 0
+          if [[ matrix.label == 'release:major' || matrix.label == 'release:minor' || matrix.label == 'release:patch' ]]; then exit 0
 
       - name: Testing Labels
         run: |
