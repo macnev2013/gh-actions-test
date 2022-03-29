@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-    if: startsWith(github.event.pull_request.labels.*.name, 'release:')
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -17,6 +16,7 @@ jobs:
     steps:
       - name: Testing Labels
         run: |
+          echo "-------> ${{github.event.pull_request.labels}}"
           release_type=`echo ${{matrix.label}} | awk -F':' '{print $NF}'`
           echo "RELEASE_TYPE=${release_type}" >> $GITHUB_ENV
           echo "Releasing: ${release_type}"
