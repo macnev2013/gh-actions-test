@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        label: ${{github.event.pull_request.labels.release:*.name}}
+        label: ${{github.event.pull_request.labels.*.name}}
         
     steps:
       - name: Testing Labels
