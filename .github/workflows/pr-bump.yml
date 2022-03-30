@@ -21,7 +21,10 @@ jobs:
           release_type=`echo ${{matrix.label}} | awk -F':' '{print $NF}'`
           echo "RELEASE_TYPE=${release_type}" >> $GITHUB_ENV
           echo "Releasing: ${release_type}"
-          
+
+      - if: startsWith(matrix.label, 'release:')
+        uses: actions/checkout@v2
+        
       - if: startsWith(matrix.label, 'release:')
         name: Bump version and push tag
         id: tag_version
