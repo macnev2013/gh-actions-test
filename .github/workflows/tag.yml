@@ -10,3 +10,7 @@ jobs:
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
+        
+      - name: Echo
+        run: |
+          echo "Test"
