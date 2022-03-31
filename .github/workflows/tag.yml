@@ -1,0 +1,13 @@
+on:
+  push:
+    tags:
+      - v1.**
+
+jobs:
+  tag-release:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
