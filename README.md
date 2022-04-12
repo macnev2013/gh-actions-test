@@ -13,7 +13,6 @@ minor
 test
 asdad 
    
-  Newest release
-  
-  
-  testing latest release
+Newest release
+testing latest release
+Testing patch latest release download
